@@ -149,6 +149,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "theritikchoure",
+      "name": "Ritik Chourasiya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56495602?v=4",
+      "profile": "https://linktr.ee/theritikchoure",
+      "contributions": [
+        "tool"
+      ]
+    },
+    {
+      "login": "rickknowlton",
+      "name": "Rick Knowlton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10679138?v=4",
+      "profile": "https://rickknowlton.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "amjedidiah",
+      "name": "Jedidiah Amaraegbu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17021436?v=4",
+      "profile": "https://github.com/amjedidiah",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -156,5 +183,7 @@
   "projectOwner": "colbyfayock",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular",
+  "commitType": "docs"
 }

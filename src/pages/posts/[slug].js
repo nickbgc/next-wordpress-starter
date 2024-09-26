@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Helmet } from 'react-helmet';
 
-import { getPostBySlug, getAllPosts, getRelatedPosts, postPathBySlug } from 'lib/posts';
+import { getPostBySlug, getRecentPosts, getRelatedPosts, postPathBySlug } from 'lib/posts';
 import { categoryPathBySlug } from 'lib/categories';
 import { formatDate } from 'lib/datetime';
 import { ArticleJsonLd } from 'lib/json-ld';
@@ -116,10 +116,7 @@ export default function Post({ post, socialImage, related }) {
             <div className={styles.relatedPosts}>
               {relatedPostsTitle.name ? (
                 <span>
-                  More from{' '}
-                  <Link href={relatedPostsTitle.link}>
-                    <a>{relatedPostsTitle.name}</a>
-                  </Link>
+                  More from <Link href={relatedPostsTitle.link}>{relatedPostsTitle.name}</Link>
                 </span>
               ) : (
                 <span>More Posts</span>
@@ -127,9 +124,7 @@ export default function Post({ post, socialImage, related }) {
               <ul>
                 {relatedPostsList.map((post) => (
                   <li key={post.title}>
-                    <Link href={postPathBySlug(post.slug)}>
-                      <a>{post.title}</a>
-                    </Link>
+                    <Link href={postPathBySlug(post.slug)}>{post.title}</Link>
                   </li>
                 ))}
               </ul>
@@ -143,6 +138,14 @@ export default function Post({ post, socialImage, related }) {
 
 export async function getStaticProps({ params = {} } = {}) {
   const { post } = await getPostBySlug(params?.slug);
+
+  if (!post) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
+
   const { categories, databaseId: postId } = post;
 
   const props = {
@@ -169,7 +172,14 @@ export async function getStaticProps({ params = {} } = {}) {
 }
 
 export async function getStaticPaths() {
-  const { posts } = await getAllPosts({
+  // Only render the most recent posts to avoid spending unecessary time
+  // querying every single post from WordPress
+
+  // Tip: this can be customized to use data or analytitcs to determine the
+  // most popular posts and render those instead
+
+  const { posts } = await getRecentPosts({
+    count: process.env.POSTS_PRERENDER_COUNT, // Update this value in next.config.js!
     queryIncludes: 'index',
   });
 
@@ -183,6 +193,6 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 }
